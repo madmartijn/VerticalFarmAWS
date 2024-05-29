@@ -87,9 +87,17 @@ Resources:
               responses: {}
           /TotalData:
             get:
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetCurrentDataTotal.Arn}/invocations
               responses: {}
           /TotalData/{DateTime}:
             get:
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetPeriodDataTotal.Arn}/invocations
               responses: {}
       EndpointConfiguration: REGIONAL
       TracingEnabled: true
@@ -235,6 +243,13 @@ Resources:
       MemorySize: 3008
       Timeout: 30
       Tracing: Active
+      Events:
+        KastAPIGETTotalData:
+          Type: Api
+          Properties:
+            Path: /TotalData
+            Method: GET
+            RestApiId: !Ref KastAPI
   GetCurrentDataTotalLogGroup:
     Type: AWS::Logs::LogGroup
     DeletionPolicy: Retain
@@ -253,10 +268,10 @@ Resources:
       Timeout: 30
       Tracing: Active
       Events:
-        KastAPIGETDataDateTime:
+        KastAPIGETTotalDataDateTime:
           Type: Api
           Properties:
-            Path: /Data/{DateTime}
+            Path: /TotalData/{DateTime}
             Method: GET
             RestApiId: !Ref KastAPI
   GetPeriodDataTotalLogGroup:
