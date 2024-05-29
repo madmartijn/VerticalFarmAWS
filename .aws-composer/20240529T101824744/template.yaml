@@ -1,0 +1,342 @@
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  GetKast:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: !Sub
+        - Stack ${AWS::StackName} Function ${ResourceName}
+        - ResourceName: GetKast
+      CodeUri: src/GetKast
+      Handler: index.handler
+      Runtime: nodejs20.x
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Environment:
+        Variables:
+          MICROSOFTSQL_PORT: !Ref MicrosoftSQLPort
+          MICROSOFTSQL_HOSTNAME: !Ref MicrosoftSQLHostname
+          MICROSOFTSQL_SECRETARN: !Ref MicrosoftSQLSecretArn
+      Policies:
+        - AWSSecretsManagerGetSecretValuePolicy:
+            SecretArn: !Ref MicrosoftSQLSecretArn
+      Events:
+        KastAPIGETKastKastId:
+          Type: Api
+          Properties:
+            Path: /Kast/{KastId}
+            Method: GET
+            RestApiId: !Ref KastAPI
+  GetKastLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Retain
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${GetKast}
+  KastAPI:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: !Sub
+        - ${ResourceName} From Stack ${AWS::StackName}
+        - ResourceName: KastAPI
+      StageName: Prod
+      DefinitionBody:
+        openapi: '3.0'
+        info: {}
+        paths:
+          /Kast/{KastId}:
+            get:
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetKast.Arn}/invocations
+              responses: {}
+          /Lade/{LadeId}:
+            get:
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetLade.Arn}/invocations
+              responses: {}
+          /Notities/{LadeId}:
+            get:
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetNotities.Arn}/invocations
+              responses: {}
+          /Gewas/{LadeId}:
+            get:
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetGewassen.Arn}/invocations
+              responses: {}
+          /Data/{LadeId}:
+            get:
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetCurrentDataLade.Arn}/invocations
+              responses: {}
+          /Data/{LadeId}/{DateTime}:
+            get:
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetPeriodDataLade.Arn}/invocations
+              responses: {}
+          /Data:
+            get:
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetCurrentDataTotal.Arn}/invocations
+              responses: {}
+          /Data/{DateTime}:
+            get:
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetPeriodDataTotal.Arn}/invocations
+              responses: {}
+      EndpointConfiguration: REGIONAL
+      TracingEnabled: true
+      Cors:
+        MaxAge: 5
+  GetLade:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: !Sub
+        - Stack ${AWS::StackName} Function ${ResourceName}
+        - ResourceName: GetLade
+      CodeUri: src/GetLade
+      Handler: index.handler
+      Runtime: nodejs20.x
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Environment:
+        Variables:
+          MICROSOFTSQL_PORT: !Ref MicrosoftSQLPort
+          MICROSOFTSQL_HOSTNAME: !Ref MicrosoftSQLHostname
+          MICROSOFTSQL_SECRETARN: !Ref MicrosoftSQLSecretArn
+      Policies:
+        - AWSSecretsManagerGetSecretValuePolicy:
+            SecretArn: !Ref MicrosoftSQLSecretArn
+      Events:
+        KastAPIGETLadeLadeId:
+          Type: Api
+          Properties:
+            Path: /Lade/{LadeId}
+            Method: GET
+            RestApiId: !Ref KastAPI
+  GetLadeLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Retain
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${GetLade}
+  GetNotities:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: !Sub
+        - Stack ${AWS::StackName} Function ${ResourceName}
+        - ResourceName: GetNotities
+      CodeUri: src/GetNotities
+      Handler: index.handler
+      Runtime: nodejs20.x
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Environment:
+        Variables:
+          MICROSOFTSQL_PORT: !Ref MicrosoftSQLPort
+          MICROSOFTSQL_HOSTNAME: !Ref MicrosoftSQLHostname
+          MICROSOFTSQL_SECRETARN: !Ref MicrosoftSQLSecretArn
+      Policies:
+        - AWSSecretsManagerGetSecretValuePolicy:
+            SecretArn: !Ref MicrosoftSQLSecretArn
+      Events:
+        KastAPIGETNotitiesLadeId:
+          Type: Api
+          Properties:
+            Path: /Notities/{LadeId}
+            Method: GET
+            RestApiId: !Ref KastAPI
+  GetNotitiesLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Retain
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${GetNotities}
+  GetGewassen:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: !Sub
+        - Stack ${AWS::StackName} Function ${ResourceName}
+        - ResourceName: GetGewassen
+      CodeUri: src/GetGewassen
+      Handler: index.handler
+      Runtime: nodejs20.x
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Events:
+        KastAPIGETGewasLadeId:
+          Type: Api
+          Properties:
+            Path: /Gewas/{LadeId}
+            Method: GET
+            RestApiId: !Ref KastAPI
+      Environment:
+        Variables:
+          MICROSOFTSQL_PORT: !Ref MicrosoftSQLPort
+          MICROSOFTSQL_HOSTNAME: !Ref MicrosoftSQLHostname
+          MICROSOFTSQL_SECRETARN: !Ref MicrosoftSQLSecretArn
+      Policies:
+        - AWSSecretsManagerGetSecretValuePolicy:
+            SecretArn: !Ref MicrosoftSQLSecretArn
+  GetGewassenLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Retain
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${GetGewassen}
+  GetCurrentDataLade:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: !Sub
+        - Stack ${AWS::StackName} Function ${ResourceName}
+        - ResourceName: GetCurrentDataLade
+      CodeUri: src/GetCurrentDataLade
+      Handler: index.handler
+      Runtime: nodejs20.x
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Events:
+        KastAPIGETDataLadeId:
+          Type: Api
+          Properties:
+            Path: /Data/{LadeId}
+            Method: GET
+            RestApiId: !Ref KastAPI
+      Environment:
+        Variables:
+          MICROSOFTSQL_PORT: !Ref MicrosoftSQLPort
+          MICROSOFTSQL_HOSTNAME: !Ref MicrosoftSQLHostname
+          MICROSOFTSQL_SECRETARN: !Ref MicrosoftSQLSecretArn
+      Policies:
+        - AWSSecretsManagerGetSecretValuePolicy:
+            SecretArn: !Ref MicrosoftSQLSecretArn
+  GetCurrentDataLadeLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Retain
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${GetCurrentDataLade}
+  GetCurrentDataTotal:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: !Sub
+        - Stack ${AWS::StackName} Function ${ResourceName}
+        - ResourceName: GetCurrentDataTotal
+      CodeUri: src/GetCurrentDataTotal
+      Handler: index.handler
+      Runtime: nodejs20.x
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Events:
+        KastAPIGETData:
+          Type: Api
+          Properties:
+            Path: /Data
+            Method: GET
+            RestApiId: !Ref KastAPI
+  GetCurrentDataTotalLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Retain
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${GetCurrentDataTotal}
+  GetPeriodDataTotal:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: !Sub
+        - Stack ${AWS::StackName} Function ${ResourceName}
+        - ResourceName: GetPeriodDataTotal
+      CodeUri: src/GetPeriodDataTotal
+      Handler: index.handler
+      Runtime: nodejs20.x
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Events:
+        KastAPIGETDataDateTime:
+          Type: Api
+          Properties:
+            Path: /Data/{DateTime}
+            Method: GET
+            RestApiId: !Ref KastAPI
+  GetPeriodDataTotalLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Retain
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${GetPeriodDataTotal}
+  GetPeriodDataLade:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: !Sub
+        - Stack ${AWS::StackName} Function ${ResourceName}
+        - ResourceName: GetPeriodDataLade
+      CodeUri: src/GetPeriodDataLade
+      Handler: index.handler
+      Runtime: nodejs20.x
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Events:
+        KastAPIGETDataLadeIdDateTime:
+          Type: Api
+          Properties:
+            Path: /Data/{LadeId}/{DateTime}
+            Method: GET
+            RestApiId: !Ref KastAPI
+      Environment:
+        Variables:
+          MICROSOFTSQL_PORT: !Ref MicrosoftSQLPort
+          MICROSOFTSQL_HOSTNAME: !Ref MicrosoftSQLHostname
+          MICROSOFTSQL_SECRETARN: !Ref MicrosoftSQLSecretArn
+      Policies:
+        - AWSSecretsManagerGetSecretValuePolicy:
+            SecretArn: !Ref MicrosoftSQLSecretArn
+  GetPeriodDataLadeLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Retain
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${GetPeriodDataLade}
+Metadata:
+  AWS::Composer::ExternalResources:
+    MicrosoftSQL:
+      Type: externalRDS
+      Settings:
+        Port: !Ref MicrosoftSQLPort
+        Hostname: !Ref MicrosoftSQLHostname
+        SecretArn: !Ref MicrosoftSQLSecretArn
+  AWS::Composer::Groups:
+    Group:
+      Label: Group
+      Members:
+        - GetKast
+        - GetLade
+        - GetGewassen
+        - GetCurrentDataLade
+        - GetPeriodDataLade
+        - GetCurrentDataTotal
+        - GetPeriodDataTotal
+        - GetNotities
+Parameters:
+  MicrosoftSQLPort:
+    Type: Number
+    Default: 1433
+  MicrosoftSQLHostname:
+    Type: String
+    Default: database-1.cpgsme0uejc2.eu-central-1.rds.amazonaws.com
+  MicrosoftSQLSecretArn:
+    Type: String
