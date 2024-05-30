@@ -2,6 +2,8 @@
 
 [sync_state]
 dependency_layer = false
-latest_infra_sync_time = "2024-05-29T11:28:00.985193"
+latest_infra_sync_time = "2024-05-30T09:41:58.026960"
 
-[resource_sync_states]
+[resource_sync_states."ZipFunctionSyncFlow:GetCurrentDataTotal"]
+hash = "747415424c03885e4889c8677d16bcb07d7ef8d9dbadd7d690f17edd30afa5a5"
+sync_time = "2024-05-30T09:48:27.893644"

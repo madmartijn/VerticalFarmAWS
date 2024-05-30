@@ -306,6 +306,18 @@ Resources:
             Method: GET
             RestApiId:
               Ref: KastAPI
+      Environment:
+        Variables:
+          MICROSOFTSQL_PORT:
+            Ref: MicrosoftSQLPort
+          MICROSOFTSQL_HOSTNAME:
+            Ref: MicrosoftSQLHostname
+          MICROSOFTSQL_SECRETARN:
+            Ref: MicrosoftSQLSecretArn
+      Policies:
+      - AWSSecretsManagerGetSecretValuePolicy:
+          SecretArn:
+            Ref: MicrosoftSQLSecretArn
     Metadata:
       SamResourceId: GetCurrentDataTotal
   GetCurrentDataTotalLogGroup:
@@ -335,6 +347,18 @@ Resources:
             Method: GET
             RestApiId:
               Ref: KastAPI
+      Environment:
+        Variables:
+          MICROSOFTSQL_PORT:
+            Ref: MicrosoftSQLPort
+          MICROSOFTSQL_HOSTNAME:
+            Ref: MicrosoftSQLHostname
+          MICROSOFTSQL_SECRETARN:
+            Ref: MicrosoftSQLSecretArn
+      Policies:
+      - AWSSecretsManagerGetSecretValuePolicy:
+          SecretArn:
+            Ref: MicrosoftSQLSecretArn
     Metadata:
       SamResourceId: GetPeriodDataTotal
   GetPeriodDataTotalLogGroup:

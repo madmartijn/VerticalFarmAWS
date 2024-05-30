@@ -250,6 +250,14 @@ Resources:
             Path: /TotalData
             Method: GET
             RestApiId: !Ref KastAPI
+      Environment:
+        Variables:
+          MICROSOFTSQL_PORT: !Ref MicrosoftSQLPort
+          MICROSOFTSQL_HOSTNAME: !Ref MicrosoftSQLHostname
+          MICROSOFTSQL_SECRETARN: !Ref MicrosoftSQLSecretArn
+      Policies:
+        - AWSSecretsManagerGetSecretValuePolicy:
+            SecretArn: !Ref MicrosoftSQLSecretArn
   GetCurrentDataTotalLogGroup:
     Type: AWS::Logs::LogGroup
     DeletionPolicy: Retain
@@ -274,6 +282,14 @@ Resources:
             Path: /TotalData/{DateTime}
             Method: GET
             RestApiId: !Ref KastAPI
+      Environment:
+        Variables:
+          MICROSOFTSQL_PORT: !Ref MicrosoftSQLPort
+          MICROSOFTSQL_HOSTNAME: !Ref MicrosoftSQLHostname
+          MICROSOFTSQL_SECRETARN: !Ref MicrosoftSQLSecretArn
+      Policies:
+        - AWSSecretsManagerGetSecretValuePolicy:
+            SecretArn: !Ref MicrosoftSQLSecretArn
   GetPeriodDataTotalLogGroup:
     Type: AWS::Logs::LogGroup
     DeletionPolicy: Retain
