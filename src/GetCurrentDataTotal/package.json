@@ -1,4 +1,8 @@
 {
 	"name": "function",
-	"version": "1.0.0"
+	"version": "1.0.0",
+	"dependencies": {
+		"@aws-sdk/client-secrets-manager": "^3.583.0",
+		"mssql": "^10.0.2"
+	}
 }
