@@ -6,7 +6,7 @@ async function getPool() {
 
   pool = new mssql.ConnectionPool({
     user: "admin",
-    password: "O+qG5}||4$+g:9K1SF4+|MvWvMQM",
+    password: "KY56]St4J[%>KADQmODERPlVScyd",
     port: 1433,
     database: "VerticalFarm",
     server: "database-1.cpgsme0uejc2.eu-central-1.rds.amazonaws.com",
@@ -30,12 +30,13 @@ async function getPool() {
 exports.handler = async (event) => {
   try {
     const pool = await getPool();
+
     const data = await pool.query`SELECT * FROM dbo.DataHistorie`;
     // no need to close the pool
 
     return { statusCode: 200, body: JSON.stringify(data.recordset) };
   } catch (err) {
     console.error(err);
-    return { statusCode: 500, body: JSON.stringify(err) };
+    return { statusCode: 500, body: "Internal Server Error" };
   }
 };
