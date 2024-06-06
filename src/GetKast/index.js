@@ -32,7 +32,7 @@ exports.handler = async (event) => {
     const pool = await getPool();
 
     const data =
-      await pool.query`SELECT * FROM dbo.Kast WHERE KastId = ${event.pathParameters.KastId.toString()}`;
+      await pool.query`SELECT * FROM dbo.Kast WHERE KastNumber = ${event.pathParameters.KastId.toString()}`;
     // no need to close the pool
 
     return { statusCode: 200, body: JSON.stringify(data.recordset) };
