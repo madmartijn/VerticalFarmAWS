@@ -6,7 +6,7 @@ async function getPool() {
 
   pool = new mssql.ConnectionPool({
     user: "admin",
-    password: "KY56]St4J[%>KADQmODERPlVScyd",
+    password: "*(tnClq<Xuae!Pe}q}K-~21D]?vG",
     port: 1433,
     database: "VerticalFarm",
     server: "database-1.cpgsme0uejc2.eu-central-1.rds.amazonaws.com",
